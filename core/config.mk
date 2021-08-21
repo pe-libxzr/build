@@ -271,6 +271,12 @@ else
 JAVA_TMPDIR_ARG :=
 endif
 
+ifneq ($(CUSTOM_BUILD),)
+ifneq ($(wildcard device/custom/sepolicy/common/sepolicy.mk),)
+$(eval include device/custom/sepolicy/common/sepolicy.mk)
+endif
+endif
+
 # ###############################################################
 # Include sub-configuration files
 # ###############################################################
@@ -1231,14 +1237,6 @@ dont_bother_goals := out \
     recoveryimage-nodeps \
     vbmetaimage-nodeps \
     product-graph dump-products
-
-ifneq ($(CUSTOM_BUILD),)
-ifneq ($(wildcard device/custom/sepolicy/common/sepolicy.mk),)
-## We need to be sure the global selinux policies are included
-## last, to avoid accidental resetting by device configs
-$(eval include device/custom/sepolicy/common/sepolicy.mk)
-endif
-endif
 
 ifeq ($(CALLED_FROM_SETUP),true)
 include $(BUILD_SYSTEM)/ninja_config.mk
